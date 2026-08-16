@@ -272,23 +272,24 @@ async function handleSubmit() {
     // #DEV-ONLY: Menampilkan balasan chatbot Time Manager ke layar di sebelah kiri
     appendChatMessage("model", botReply);
 
+    // Cek jika ada respons INVALID
+    if (botReply.trim().startsWith("INVALID") || botReply.includes("INVALID")) {
+      alert("ERROR: invalid input or something wrong. Try again");
+      return;
+    }
+
     // #DEV-ONLY: Mengekstrak data jadwal dari teks balasan dan merendernya ke tabel HTML
     parseScheduleToTable(botReply);
 
     // #DEV-ONLY: Memunculkan seksi tabel hasil jadwal
     document.getElementById("result-section").style.display = "block";
-
-    // Cek jika ada respons INVALID
-    if (botReply.trim().startsWith("INVALID") || botReply.includes("INVALID")) {
-      alert("ERROR: invalid input or something wrong. Try again");
-    }
   } catch (error) {
     // #DEV-ONLY: Menyembunyikan indikator loading saat terjadi kegagalan sistem
     document.getElementById("loading-indicator").style.display = "none";
     // #DEV-ONLY: Menampilkan pesan ramah penanganan error ke dalam obrolan
     const errorMsg = "INVALID\n\nUps, Time Manager sedang sibuk sekarang. Coba lagi ya! 🙏 (" + error.message + ")";
     appendChatMessage("model", errorMsg);
-    
+
     // Alert untuk kegagalan sistem
     alert(errorMsg);
   }
