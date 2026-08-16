@@ -245,6 +245,10 @@ function saveFreetimeToStorage() {
 
 // #DEV-ONLY: Mendefinisikan fungsi penanganan saat form dikirimkan
 async function handleSubmit() {
+  // Simpan data tugas ke LocalStorage
+  saveTasksToStorage();
+  saveFreetimeToStorage();
+
   // #DEV-ONLY: Memverifikasi keberadaan API key untuk menghindari kegagalan request
   if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("API_KEY")) {
     // #DEV-ONLY: Menampilkan notifikasi kesalahan jika API Key tidak valid atau kosong
@@ -254,10 +258,6 @@ async function handleSubmit() {
 
   // #DEV-ONLY: Menyusun pesan dari form pengguna menggunakan fungsi buildPrompt
   const userPrompt = buildPrompt();
-
-  // Simpan data tugas ke LocalStorage
-  saveTasksToStorage();
-  saveFreetimeToStorage();
 
   // #DEV-ONLY: Menampilkan pesan user ke layar obrolan di sebelah kanan
   appendChatMessage("user", userPrompt);
