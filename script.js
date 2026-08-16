@@ -539,12 +539,28 @@ function updateTimer() {
   }
 
   let nextTime = null;
+  let nextTimeIndex = -1;
   for (let i = 0; i < times.length; i++) {
     const target = new Date();
     target.setHours(times[i].hour, times[i].minute, 0, 0);
     if (target > now) {
       nextTime = target;
+      nextTimeIndex = i;
       break;
+    }
+  }
+
+  // Ubah teks judul timer berdasarkan status pengerjaan
+  const timerTitle = document.querySelector(".timer-section h2");
+  if (timerTitle) {
+    if (nextTimeIndex !== -1) {
+      if (nextTimeIndex % 2 === 0) {
+        timerTitle.innerText = "Waktu menuju pengerjaan";
+      } else {
+        timerTitle.innerText = "Sisa Waktu Pengerjaan";
+      }
+    } else {
+      timerTitle.innerText = "Sisa Waktu Pengerjaan";
     }
   }
 
