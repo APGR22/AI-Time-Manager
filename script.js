@@ -6,11 +6,9 @@
   ========================================================================
 */
 
-// #DEV-ONLY: Mendefinisikan konstanta API Key untuk mengotentikasi request ke Google Gemini
-const GEMINI_API_KEY = "";
-
-// #DEV-ONLY: Mendefinisikan endpoint URL resmi untuk model Gemini 3 Flash Preview
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+// #DEV-ONLY: API Key dan Endpoint kini dipindahkan ke Cloudflare Pages Functions (backend)
+// Endpoint lokal untuk fetch request
+const GEMINI_ENDPOINT = "/api/gemini";
 
 // #DEV-ONLY: Mendefinisikan System Prompt untuk mengatur kepribadian chatbot dan aturan format keluaran
 const SYSTEM_PROMPT = `
@@ -248,13 +246,6 @@ async function handleSubmit() {
   // Simpan data tugas ke LocalStorage
   saveTasksToStorage();
   saveFreetimeToStorage();
-
-  // #DEV-ONLY: Memverifikasi keberadaan API key untuk menghindari kegagalan request
-  if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("API_KEY")) {
-    // #DEV-ONLY: Menampilkan notifikasi kesalahan jika API Key tidak valid atau kosong
-    alert("API Key Gemini belum diisi atau tidak valid di file script.js!");
-    return;
-  }
 
   // #DEV-ONLY: Menyusun pesan dari form pengguna menggunakan fungsi buildPrompt
   const userPrompt = buildPrompt();
