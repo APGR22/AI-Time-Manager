@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <header class="app-header">
@@ -25,22 +27,25 @@
     <section class="welcome-banner">
       <div class="bot-avatar">🤖</div>
       <div class="welcome-text">
-        <p id="welcome-message">Halo! Aku Time Manager👋 Ada waktu yang kemepetan banget? Yuk, isi jadwal luangmu di bawah biar aku bantu susun!</p>
+        <p id="welcome-message">Halo! Aku Time Manager👋 Ada waktu yang kemepetan banget? Yuk, isi jadwal luangmu di
+          bawah biar aku bantu susun!</p>
       </div>
     </section>
 
     <!-- Timer Area -->
-    <section class="timer-section" style="text-align: center; margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-      <h2 style="margin: 0; font-size: 1.2rem; color: #333;">Sisa Waktu Pengerjaan</h2>
-      <div id="countdown-timer" style="font-size: 2rem; font-weight: bold; color: #ff5722; margin-top: 10px;">--:--:--</div>
-      <p id="timer-label" style="margin: 5px 0 0; font-size: 0.9rem; color: #666;">Menunggu jadwal...</p>
+    <section class="timer-section"
+      style="text-align: center; margin-bottom: 20px; padding: 15px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+      <h2 style="margin: 0; font-size: 1.2rem; color: var(--accent-red);">Sisa Waktu Pengerjaan</h2>
+      <div id="countdown-timer" style="font-size: 2rem; font-weight: bold; color: #ff5722; margin-top: 10px;">--:--:--
+      </div>
+      <p id="timer-label" style="margin: 5px 0 0; font-size: 0.9rem; color: var(--text-muted);">Menunggu jadwal...</p>
     </section>
 
     <!-- Form Input Manajemen -->
     <section class="form-card">
       <h2>1. Waktu Luang Kamu (Per Hari)</h2>
       <p class="form-hint">Isi jam luang kamu, atau ketik <strong>Tidak ada</strong> jika sedang sibuk berat.</p>
-      
+
       <div class="freetime-grid" id="freetime-container">
         <div class="day-input">
           <label for="senin">Senin</label>
@@ -76,7 +81,7 @@
 
       <h2>2. Daftar Tugas & PR Kamu</h2>
       <p class="form-hint">Daftarkan semua tugasmu, dari PR sampai jadwal eskul atau waktu hobi!</p>
-      
+
       <div id="tasks-container">
         <!-- Item tugas akan ditambahkan secara dinamis oleh JavaScript -->
       </div>
@@ -132,4 +137,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
