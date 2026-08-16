@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         addTaskRow("", 5, getDefaultDateTime(1), 5);
       }
-    } catch(e) {
+    } catch (e) {
       addTaskRow("Matematika", 8, getDefaultDateTime(1), 7);
       addTaskRow("Vibe Coding", 9, getDefaultDateTime(2), 6);
       addTaskRow("Bahasa Indonesia", 6, getDefaultDateTime(3), 5);
@@ -207,7 +207,10 @@ function buildPrompt() {
   }
 
   // #DEV-ONLY: Menambahkan kalimat penutup penegasan format output ke bagian akhir string prompt
-  promptText += "BUATKAN JAWABAN DALAM BENTUK FORMAT `Senin: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Selasa: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Rabu: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Kamis: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Jum'at: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Sabtu: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", dan Minggu: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\"`";
+  promptText += `
+  BUATKAN JAWABAN DALAM BENTUK FORMAT \`Senin: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Selasa: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Rabu: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Kamis: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Jum'at: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", Sabtu: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\", dan Minggu: \"{daftar nama tugas beserta waktu pengerjaannya setiap tugas, atau Tidak ada}\"\`!
+  Jika ditemukan invalid input atau format yang tidak sesuai, berikan pesan \"INVALID\" di jawaban paling atas!
+  `;
 
   // #DEV-ONLY: Mengembalikan string prompt akhir yang siap dikirimkan
   return promptText;
@@ -274,11 +277,20 @@ async function handleSubmit() {
 
     // #DEV-ONLY: Memunculkan seksi tabel hasil jadwal
     document.getElementById("result-section").style.display = "block";
+
+    // Cek jika ada respons INVALID
+    if (botReply.trim().startsWith("INVALID") || botReply.includes("INVALID")) {
+      alert("ERROR: invalid input or something wrong. Try again");
+    }
   } catch (error) {
     // #DEV-ONLY: Menyembunyikan indikator loading saat terjadi kegagalan sistem
     document.getElementById("loading-indicator").style.display = "none";
     // #DEV-ONLY: Menampilkan pesan ramah penanganan error ke dalam obrolan
-    appendChatMessage("model", "Ups, Time Manager sedang sibuk sekarang. Coba lagi ya! 🙏 (" + error.message + ")");
+    const errorMsg = "INVALID\n\nUps, Time Manager sedang sibuk sekarang. Coba lagi ya! 🙏 (" + error.message + ")";
+    appendChatMessage("model", errorMsg);
+    
+    // Alert untuk kegagalan sistem
+    alert(errorMsg);
   }
 }
 
@@ -449,30 +461,30 @@ let alarmInterval = null;
 function playLoudAlarm() {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
-  
+
   const ctx = new AudioContext();
   let toggle = false;
-  
+
   const playBeep = () => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sawtooth';
-    osc.frequency.value = toggle ? 1200 : 900; 
+    osc.frequency.value = toggle ? 1200 : 900;
     toggle = !toggle;
-    
+
     gain.gain.value = 1;
     osc.connect(gain);
     gain.connect(ctx.destination);
-    
+
     osc.start();
     // Fade out halus agar tidak ada suara klik yang mengganggu
     gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.25);
     osc.stop(ctx.currentTime + 0.3);
   };
-  
+
   playBeep();
   alarmInterval = setInterval(playBeep, 250);
-  
+
   // Hentikan alarm setelah 10 detik
   setTimeout(() => {
     clearInterval(alarmInterval);
@@ -537,7 +549,7 @@ function updateTimer() {
 
   if (nextTime) {
     const diff = nextTime - now;
-    
+
     // Pemicu alarm pada sisa waktu 5 detik
     if (diff <= 6000 && diff > 4500 && alarmTriggeredForTarget !== nextTime.getTime()) {
       alarmTriggeredForTarget = nextTime.getTime();
@@ -547,7 +559,7 @@ function updateTimer() {
     const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
     const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
     const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-    
+
     document.getElementById("countdown-timer").innerText = `${h}:${m}:${s}`;
     document.getElementById("timer-label").innerText = `Menuju ${nextTime.getHours().toString().padStart(2, '0')}:${nextTime.getMinutes().toString().padStart(2, '0')}`;
   } else {
