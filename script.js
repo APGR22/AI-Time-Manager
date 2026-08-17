@@ -571,8 +571,9 @@ function updateTimer() {
       console.log(rawStr);
 
       let taskName = rawStr
-        .replace(/^[\s,\.\-]+/, "") // Hapus spasi dan tanda baca di awal
+        .replace(/^[\W+,\.\-]+/, "") // Hapus spasi dan tanda baca di awal
         .replace(/\b(lalu|kemudian|dan|selanjutnya|pukul|jam|pada|dari|mulai|sampai|hingga)\b/gi, "") // Hapus kata penghubung/waktu
+        .replace(/^[\W+,\.\-]+/, "") // Hapus spasi dan tanda baca di awal
         .replace(/[^a-zA-Z0-9\s]+$/g, "") // Hapus simbol di akhir teks
         .replace(/\s{2,}/g, " ") // Rapikan spasi ganda
         .trim();
