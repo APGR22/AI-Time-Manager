@@ -568,7 +568,7 @@ function updateTimer() {
       const endStrIdx = times[taskIdx * 2].index;
       let rawStr = todaySchedule.substring(startStrIdx, endStrIdx);
 
-      console.log(rawStr);
+      // console.log(rawStr);
 
       let taskName = rawStr
         .replace(/^[\W+,\.\-]+/, "") // Hapus spasi dan tanda baca di awal
@@ -577,8 +577,8 @@ function updateTimer() {
         .replace(/[^a-zA-Z0-9\s]+$/g, "") // Hapus simbol di akhir teks
         .replace(/\s{2,}/g, " ") // Rapikan spasi ganda
         .trim();
-      
-      console.log(taskName);
+
+      // console.log(taskName);
 
       if (taskName) {
         if (nextTimeIndex % 2 === 0) {
