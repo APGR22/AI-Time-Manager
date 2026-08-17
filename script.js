@@ -332,6 +332,12 @@ async function callGeminiAPI(userText) {
   // #DEV-ONLY: Mengekstrak string teks dari struktur balasan API Gemini
   const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, aku tidak dapat memuat jadwalmu saat ini.";
 
+  // #DEV-ONLY: Memeriksa apakah histori mencapai 30 item
+  // Jika tercapai atau lebih, hapus histori paling terlama (pasangan user dan model)
+  while (chatHistory.length >= 30) {
+    chatHistory.splice(0, 2);
+  }
+
   // #DEV-ONLY: Menambahkan turn input user terbaru ke dalam riwayat memori
   chatHistory.push({ role: "user", parts: [{ text: userText }] });
   // #DEV-ONLY: Menambahkan turn respons model terbaru ke dalam riwayat memori
