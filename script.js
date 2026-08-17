@@ -221,12 +221,18 @@ function saveTasksToStorage() {
   const taskElements = document.querySelectorAll(".task-item");
   const tasks = [];
   taskElements.forEach(task => {
+    const importance = Math.min(Math.max(task.querySelector(".task-importance").value, 1), 10);
+    const difficulty = Math.min(Math.max(task.querySelector(".task-difficulty").value, 1), 10);
+
     tasks.push({
       name: task.querySelector(".task-name").value,
-      importance: task.querySelector(".task-importance").value,
+      importance: importance,
       deadline: task.querySelector(".task-deadline").value,
-      difficulty: task.querySelector(".task-difficulty").value
+      difficulty: difficulty
     });
+
+    task.querySelector(".task-importance").value = importance;
+    task.querySelector(".task-difficulty").value = difficulty;
   });
   localStorage.setItem("time_manager_tasks", JSON.stringify(tasks));
 }
@@ -356,20 +362,20 @@ function parseScheduleToTable(text) {
   const tbody = document.getElementById("schedule-tbody");
   // #DEV-ONLY: Menyimpan data sebelumnya untuk di-revert jika gagal
   const previousHTML = tbody.innerHTML;
-  
+
   // #DEV-ONLY: Mengosongkan isi tabel sebelum memasukkan baris baru
   tbody.innerHTML = "";
 
   // #DEV-ONLY: Mendefinisikan daftar hari resmi dalam satu minggu sesuai format target
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu", "Minggu"];
-  
+
   let hasValidData = false;
 
   // #DEV-ONLY: Melakukan iterasi untuk setiap hari untuk mencari keberadaan hari di dalam teks jawaban AI
   days.forEach((day, index) => {
     const regex = new RegExp(`(?<=${day}: ").*?(?=")`);
     const match = text.match(regex);
-    
+
     if (match) {
       hasValidData = true;
     }
