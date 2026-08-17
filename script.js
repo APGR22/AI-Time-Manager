@@ -567,13 +567,17 @@ function updateTimer() {
       const startStrIdx = taskIdx === 0 ? 0 : (times[taskIdx * 2 - 1].index + times[taskIdx * 2 - 1].length);
       const endStrIdx = times[taskIdx * 2].index;
       let rawStr = todaySchedule.substring(startStrIdx, endStrIdx);
-      
+
+      console.log(rawStr);
+
       let taskName = rawStr
         .replace(/^[\s,\.\-]+/, "") // Hapus spasi dan tanda baca di awal
         .replace(/\b(lalu|kemudian|dan|selanjutnya|pukul|jam|pada|dari|mulai|sampai|hingga)\b/gi, "") // Hapus kata penghubung/waktu
         .replace(/[^a-zA-Z0-9\s]+$/g, "") // Hapus simbol di akhir teks
         .replace(/\s{2,}/g, " ") // Rapikan spasi ganda
         .trim();
+      
+      console.log(taskName);
 
       if (taskName) {
         if (nextTimeIndex % 2 === 0) {
