@@ -534,7 +534,9 @@ function updateTimer() {
   while ((match = timeRegex.exec(todaySchedule)) !== null) {
     times.push({
       hour: parseInt(match[1]),
-      minute: parseInt(match[2])
+      minute: parseInt(match[2]),
+      index: match.index,
+      length: match[0].length
     });
   }
 
@@ -560,10 +562,31 @@ function updateTimer() {
   const timerTitle = document.querySelector(".timer-section h2");
   if (timerTitle) {
     if (nextTimeIndex !== -1) {
-      if (nextTimeIndex % 2 === 0) {
-        timerTitle.innerText = "Waktu menuju pengerjaan";
+      // Ekstrak nama tugas berdasarkan posisi teks di antara jam-jam tersebut
+      const taskIdx = Math.floor(nextTimeIndex / 2);
+      const startStrIdx = taskIdx === 0 ? 0 : (times[taskIdx * 2 - 1].index + times[taskIdx * 2 - 1].length);
+      const endStrIdx = times[taskIdx * 2].index;
+      let rawStr = todaySchedule.substring(startStrIdx, endStrIdx);
+      
+      let taskName = rawStr
+        .replace(/^[\s,\.\-]+/, "") // Hapus spasi dan tanda baca di awal
+        .replace(/\b(lalu|kemudian|dan|selanjutnya|pukul|jam|pada|dari|mulai|sampai|hingga)\b/gi, "") // Hapus kata penghubung/waktu
+        .replace(/[^a-zA-Z0-9\s]+$/g, "") // Hapus simbol di akhir teks
+        .replace(/\s{2,}/g, " ") // Rapikan spasi ganda
+        .trim();
+
+      if (taskName) {
+        if (nextTimeIndex % 2 === 0) {
+          timerTitle.innerText = `Waktu menuju pengerjaan ${taskName}`;
+        } else {
+          timerTitle.innerText = `Sisa Waktu Pengerjaan ${taskName}`;
+        }
       } else {
-        timerTitle.innerText = "Sisa Waktu Pengerjaan";
+        if (nextTimeIndex % 2 === 0) {
+          timerTitle.innerText = "Waktu menuju pengerjaan";
+        } else {
+          timerTitle.innerText = "Sisa Waktu Pengerjaan";
+        }
       }
     } else {
       timerTitle.innerText = "Sisa Waktu Pengerjaan";
