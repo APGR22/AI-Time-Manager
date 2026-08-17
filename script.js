@@ -354,31 +354,25 @@ async function callGeminiAPI(userText) {
 function parseScheduleToTable(text) {
   // #DEV-ONLY: Mengambil elemen tbody dari tabel jadwal
   const tbody = document.getElementById("schedule-tbody");
+  // #DEV-ONLY: Menyimpan data sebelumnya untuk di-revert jika gagal
+  const previousHTML = tbody.innerHTML;
+  
   // #DEV-ONLY: Mengosongkan isi tabel sebelum memasukkan baris baru
   tbody.innerHTML = "";
 
   // #DEV-ONLY: Mendefinisikan daftar hari resmi dalam satu minggu sesuai format target
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu", "Minggu"];
+  
+  let hasValidData = false;
 
   // #DEV-ONLY: Melakukan iterasi untuk setiap hari untuk mencari keberadaan hari di dalam teks jawaban AI
   days.forEach((day, index) => {
-    //
-
-    // // #DEV-ONLY: Menyusun pola regular expression untuk menangkap teks setelah nama hari sampai sebelum nama hari berikutnya
-    // const nextDay = days[index + 1] || "$";
-    // // #DEV-ONLY: Mengabaikan tanda pemisah maupun backticks yang kerap dihasilkan LLM pada markdown
-    // const regex = new RegExp(`${day}\\s*[:\\-]?\\s*(.*?)(?=(?:${days.join("|")})|$)`, "is");
-    // const match = text.match(regex);
-
-    // // #DEV-ONLY: Mengambil teks jadwal tugas untuk hari terpilih, jika tidak ada diberi nilai default
-    // let scheduleDetail = match ? match[1].replace(/[`*]/g, "").trim() : "Tidak ada";
-    // // #DEV-ONLY: Membersihkan sisa karakter non-teks yang tidak relevan di ujung string
-    // if (scheduleDetail.endsWith(",")) scheduleDetail = scheduleDetail.slice(0, -1);
-
-    //
-
     const regex = new RegExp(`(?<=${day}: ").*?(?=")`);
     const match = text.match(regex);
+    
+    if (match) {
+      hasValidData = true;
+    }
 
     let scheduleDetail = match ? match[0] : "Tidak ada";
 
@@ -392,6 +386,12 @@ function parseScheduleToTable(text) {
     // #DEV-ONLY: Menambahkan baris tabel ke dalam tbody DOM
     tbody.appendChild(tr);
   });
+
+  if (!hasValidData) {
+    // #DEV-ONLY: Mengembalikan isi tabel ke data sebelumnya dan memberikan alert
+    tbody.innerHTML = previousHTML;
+    alert("ERROR: Gagal menguraikan isi pesan ke dalam bentuk tabel jadwal. Coba lagi ya! 🙏");
+  }
 }
 
 // #DEV-ONLY: Mendefinisikan fungsi untuk merender bubble obrolan pada riwayat percakapan di DOM
