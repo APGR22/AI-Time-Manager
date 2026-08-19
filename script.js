@@ -620,6 +620,11 @@ function updateTimer() {
     document.getElementById("countdown-timer").innerText = `${h}:${m}:${s}`;
     document.getElementById("timer-label").innerText = `Menuju ${nextTime.getHours().toString().padStart(2, '0')}:${nextTime.getMinutes().toString().padStart(2, '0')}`;
   } else {
+    if (alarmTriggeredForTarget !== "finished") {
+      alarmTriggeredForTarget = "finished";
+      playLoudAlarm();
+    }
+
     document.getElementById("countdown-timer").innerText = "00:00:00";
     document.getElementById("timer-label").innerText = "Jadwal hari ini telah selesai!";
   }
