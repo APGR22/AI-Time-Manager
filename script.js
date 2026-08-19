@@ -604,8 +604,6 @@ function updateTimer() {
     }
   }
 
-  console.log(nextTime, now, nextTime - now);
-
   if (nextTime) {
     const diff = nextTime - now;
 
